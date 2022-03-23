@@ -1,0 +1,115 @@
+version: v0.7.1-alpha.1
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    cors:
+      allowed_origins:
+        - http://127.0.0.1:3000
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+        - X-Session-Token
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
+      allow_credentials: true
+      options_passthrough: true
+      debug: true
+      enabled: true
+  admin:
+    base_url: http://127.0.0.1:4434/
+    host: "0.0.0.0"
+    port: 4434
+
+selfservice:
+  default_browser_return_url: http://127.0.0.1:3000
+  whitelisted_return_urls:
+    - http://127.0.0.1:3000
+  methods:
+    oidc:
+      enabled: false
+      config:
+        providers:
+          - id: github
+            provider: github
+            client_id: ""
+            client_secret: ""
+            mapper_url: file:///etc/config/kratos/oidc.github.jsonnet
+            scope:
+              - user:email
+    password:
+      enabled: true
+
+  flows:
+    error:
+      ui_url: http://127.0.0.1:3000/error
+
+    settings:
+      ui_url: http://127.0.0.1:3000/settings
+      privileged_session_max_age: 15m
+
+    recovery:
+      enabled: true
+      ui_url: http://127.0.0.1:3000/recovery
+
+    verification:
+      enabled: true
+      ui_url: http://127.0.0.1:3000/verify
+      after:
+        default_browser_return_url: http://127.0.0.1:3000/dashboard
+
+    logout:
+      after:
+        default_browser_return_url: http://127.0.0.1:3000/login
+
+    login:
+      ui_url: http://127.0.0.1:3000/login
+      lifespan: 10m
+
+    registration:
+      lifespan: 10m
+      ui_url: http://127.0.0.1:3000/register
+      after:
+        password:
+          hooks:
+            - hook: session
+        oidc:
+          hooks:
+            - hook: session
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+secrets:
+  cookie:
+    - 8432a217-cc13-4ce9-bd7e-3be15a01cd87
+
+hashers:
+  argon2:
+    parallelism: 1
+    memory: 128MB
+    iterations: 2
+    salt_length: 16
+    key_length: 16
+
+identity:
+  default_schema_url: file:///etc/config/kratos/identity.schema.json
+
+session:
+  lifespan: 24h
+  cookie:
+    domain: http://127.0.0.1:3000
+    same_site: Lax
+
+courier:
+  smtp:
+    connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true&legacy_ssl=true

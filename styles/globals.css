@@ -1,0 +1,9 @@
+@import url("http://fonts.cdnfonts.com/css/segoe-ui-this");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Segoe Ui This";
+}
