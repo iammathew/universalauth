@@ -132,7 +132,7 @@ export async function getServerSideProps(context: NextPageContext) {
 
   return {
     props: {
-      flowData: flowData ?? null,
+      flowData,
     },
   };
 }

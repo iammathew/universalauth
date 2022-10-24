@@ -144,7 +144,7 @@ export async function getServerSideProps(context: NextPageContext) {
   if (!flowId) {
     return {
       redirect: {
-        destination: `${KRATOS_API_URL}/self-service/settings/browser?return_to=http://127.0.0.1:3000/settings`,
+        destination: `${KRATOS_API_URL}/self-service/settings/browser?return_to=http://127.0.0.1:3000/redirect`,
         // This url needs to change according to the work you are intending it to do
       },
     };
